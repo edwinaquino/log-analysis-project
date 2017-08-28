@@ -5,7 +5,7 @@ import psycopg2
 
 def main():
     print('LOG ANALYSIS PROJECT\n-----------------');
-
+    spacer = ("." * 50) + "\n"
     # Connection to database
     conn = psycopg2.connect("dbname=news")
 
@@ -22,13 +22,13 @@ def main():
     ) x GROUP BY x.title ORDER BY num DESC LIMIT 3
     """
     cur.execute(most_popular_articles_sql)
-    print("Popular Articles:" + "\n")
+    print("Most Popular Articles:" + "\n")
     
     counter =1;
     for (title, num) in cur.fetchall():
         print("{}. {} - {} Views".format(counter, title, num) )
         counter = counter + 1
-    print( ("." * 50) + "\n")
+    print(spacer)
 
 
 
@@ -43,13 +43,29 @@ def main():
             ORDER BY num DESC;
     """
     cur.execute(popular_authors_sql)
-    print("Popular Authors:\n")
+    print("Most Popular Authors:\n")
     counter =1;
     for (author, num) in cur.fetchall():
         print("{}. {} - {} Views".format(counter, author, num))
         counter = counter + 1
-    print("-" * 70)
+    print( spacer)
 
+
+    # Question 3 - On which days did more than 1% of requests lead to errors?
+
+    errors_sql = """
+SELECT time::date AS date, ( 
+                (sum(CASE WHEN status =
+            '404 NOT FOUND' THEN 1 ELSE 0 END) * 100.0) / count(*) ) AS error
+            FROM log GROUP BY date HAVING ( (sum(CASE WHEN status =
+            '404 NOT FOUND' THEN 1 ELSE 0 END) * 100.0) / count(*) ) > 1;
+    """
+    cur.execute(errors_sql)
+    print("Days with more than 1% errors:\n")
+    for (date, percentage) in cur.fetchall():
+        percentage = str(round(percentage, 1))
+        print("{} - {}% errors".format(date, percentage))
+    print(spacer)
 
 
 
