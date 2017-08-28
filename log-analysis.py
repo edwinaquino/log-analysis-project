@@ -45,8 +45,8 @@ def main():
     cur.execute(popular_authors_sql)
     print("Popular Authors:\n")
     counter =1;
-    for (name, num) in cur.fetchall():
-        print("{}. {} - {} views".format(counter, name, num))
+    for (author, num) in cur.fetchall():
+        print("{}. {} - {} Views".format(counter, author, num))
         counter = counter + 1
     print("-" * 70)
 
