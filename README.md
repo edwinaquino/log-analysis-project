@@ -37,9 +37,15 @@ To successfully run this script, you must install VirtualBox in your Windows, Ma
 
 Secondly, you will need to install Vagrant to share the folder to your virtual machine. [Download Vagrant](https://www.vagrantup.com/downloads.html)
 
-Next, [download the data here](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip) . You will need to unzip this file after downloading it. The file inside is called newsdata.sql. Put this file into the vagrant directory, which is shared with your virtual machine.
+Next, You will need to dowload the following two files
 
-to start vagrant, inside the vagrant directory which you donloaded from the zip file and use this command: `vagrant up`
+[fsnd-virtual-machine.zip](https://d17h27t6h515a5.cloudfront.net/topher/2017/August/59822701_fsnd-virtual-machine/fsnd-virtual-machine.zip)
+
+[newsdata.zip](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip) . 
+
+You will need to unzip the newsdata.zip file after downloading it. The file inside is called newsdata.sql. Put this file into the vagrant directory, which is shared with your virtual machine.
+
+to start vagrant, inside the vagrant directory which you donloaded from the fsnd-virtual-machine.zip file, change directory to the vagrant directory and use this command: `vagrant up`
 
 The download will start. It is a big file, be patient. Once the installation of your virtual machine has completed, you can connect to your new virtual machine using SSH with the following command: `vagrant ssh`
 
