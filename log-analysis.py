@@ -4,7 +4,7 @@ import psycopg2
 
 
 def main():
-    print('LOG ANALYSIS PROJECT\n');
+    print('LOG ANALYSIS PROJECT\n-----------------');
 
     # Connection to database
     conn = psycopg2.connect("dbname=news")
@@ -22,13 +22,34 @@ def main():
     ) x GROUP BY x.title ORDER BY num DESC LIMIT 3
     """
     cur.execute(most_popular_articles_sql)
-    print("Top 3 Most Popular Articles:" + "\n")
+    print("Popular Articles:" + "\n")
     
     counter =1;
-    for (title, view) in cur.fetchall():
-        print("{}. {} - {} Views".format(counter, title, view) )
+    for (title, num) in cur.fetchall():
+        print("{}. {} - {} Views".format(counter, title, num) )
         counter = counter + 1
-    print( ("." * 50) + "\n\n")
+    print( ("." * 50) + "\n")
+
+
+
+    # Question 2 - Who are the most popular article authors of all time?
+    popular_authors_sql = """
+            SELECT authors.name, count(log.status) AS num
+            FROM authors, articles, log
+            WHERE   authors.id = articles.author
+              
+            AND log.path = '/article/' || articles.slug
+            GROUP BY authors.name
+            ORDER BY num DESC;
+    """
+    cur.execute(popular_authors_sql)
+    print("Popular Authors:\n")
+    counter =1;
+    for (name, num) in cur.fetchall():
+        print("{}. {} - {} views".format(counter, name, num))
+        counter = counter + 1
+    print("-" * 70)
+
 
 
 
