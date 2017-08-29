@@ -1,4 +1,7 @@
 # Logs Analysis Project
+
+The purpose of this app is to analyze data from a PostgreSQL database and to answer three questions
+
 ### Project Goal Questions
 1. What are the most popular three articles of all time? Which articles have been accessed the most? Present this information as a sorted list with the most popular article at the top.
 
@@ -26,31 +29,31 @@ Example:
 
 ## Requirements
 * VirtualBox 5.1
-* Vagrant 1.9.1 
+* Vagrant 1.9.1
 * Python 2.7.13
 * psycopg2
 * Postgresql 9.5.8
 
-## How to Install
+## Installation
 
 To successfully run this script, you must install VirtualBox in your Windows, Mac or Linux. [Download VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 Secondly, you will need to install Vagrant to share the folder to your virtual machine. [Download Vagrant](https://www.vagrantup.com/downloads.html)
 
-Next, You will need to dowload the following two files
+Next, You will need to download the following two files
 
 [fsnd-virtual-machine.zip](https://d17h27t6h515a5.cloudfront.net/topher/2017/August/59822701_fsnd-virtual-machine/fsnd-virtual-machine.zip)
 
-[newsdata.zip](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip) . 
+[newsdata.zip](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip) .
 
 You will need to unzip the newsdata.zip file after downloading it. The file inside is called newsdata.sql. Put this file into the vagrant directory, which is shared with your virtual machine.
 
-to start vagrant, inside the vagrant directory which you donloaded from the fsnd-virtual-machine.zip file, change directory to the vagrant directory and use this command: `vagrant up`
+to start vagrant, inside the vagrant directory which you downloaded from the fsnd-virtual-machine.zip file, change directory to the vagrant directory and use this command: `vagrant up`
 
 The download will start. It is a big file, be patient. Once the installation of your virtual machine has completed, you can connect to your new virtual machine using SSH with the following command: `vagrant ssh`
 
 After you have successfully connected to the virtual machine, installed the database included in the zip file, the file name is newsdata.sql
-NOTE: psql already comes pre-installed in the virtual machine
+NOTE: PostgreSQL already comes pre-installed in the virtual machine
 
 `psql -d news -f newsdata.sql`
 
@@ -62,87 +65,34 @@ Here's what this command does:
 
 
 next, clone this git dispository to dowload this python script:
-`git clone `
+`git clone https://github.com/edwinaquino/log-analysis-project.git`
 
-change direcotry to log-analysis-project
+change directory to log-analysis-project
 `cd log-analysis-project`
 
 run the python script
 `python log-analysis.py`
 
+## EXAMPLE OUTPUT:
 
+`LOG ANALYSIS PROJECT
+-----------------
+Most Popular Articles:
 
+1. Candidate is jerk, alleges rival - 338647 Views
+2. Bears love berries, alleges bear - 253801 Views
+3. Bad things gone, say good people - 170098 Views
+..................................................
 
+Most Popular Authors:
 
+1. Ursula La Multa - 507594 Views
+2. Rudolf von Treppenwitz - 423457 Views
+3. Anonymous Contributor - 170098 Views
+4. Markoff Chaney - 84557 Views
+..................................................
 
+Days with more than 1% errors:
 
-
-
-
-
-
-
-
-
-
-
-
-
-* load the data onto the database
-```sql
-psql -d news -f newsdata.sql
-```
-* connect to the database
-```sql
-psql -d news
-```
-* create views
-* python3 LogsAnalysis.py
-
-### Create Views
-```sql
-CREATE VIEW author_info AS
-SELECT authors.name, articles.title, articles.slug
-FROM articles, authors
-WHERE articles.author = authors.id
-ORDER BY authors.name;
-```
-
-```sql
-CREATE VIEW path_view AS
-SELECT path, COUNT(*) AS view
-FROM log
-GROUP BY path
-ORDER BY path;
-```
-
-```sql
-CREATE VIEW article_view AS
-SELECT author_info.name, author_info.title, path_view.view
-FROM author_info, path_view
-WHERE path_view.path = CONCAT('/article/', author_info.slug)
-ORDER BY author_info.name;
-```
-
-```sql
-CREATE VIEW total_view AS
-SELECT date(time), COUNT(*) AS views
-FROM log 
-GROUP BY date(time)
-ORDER BY date(time);
-```
-
-```sql
-CREATE VIEW error_view AS
-SELECT date(time), COUNT(*) AS errors
-FROM log WHERE status = '404 NOT FOUND' 
-GROUP BY date(time) 
-ORDER BY date(time);
-```
-
-```sql
-CREATE VIEW error_rate AS
-SELECT total_view.date, (100.0*error_view.errors/total_view.views) AS percentage
-FROM total_view, error_view
-WHERE total_view.date = error_view.date
-ORDER BY total_view.date;
+2016-07-17 - 2.3% errors
+..................................................`
